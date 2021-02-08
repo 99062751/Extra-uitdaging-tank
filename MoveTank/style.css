@@ -9,3 +9,22 @@
 	background: url('tank.png') 0px 0px;
 	position: relative;
 }
+
+#bullet{
+	background: url('tank.png') 336px 170px;
+	position: relative;
+	height: 80px;
+	width: 80px;
+}
+
+div{
+	display: inline;
+}
+
+body{
+	background-image: url("maptank.png");
+	background-repeat: no-repeat;
+	background-size: 60%;
+	background-position: 300px 0px;
+}
+
