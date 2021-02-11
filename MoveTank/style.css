@@ -17,13 +17,20 @@ div#bullet{
 	width: 80px;
 }
 
-div{
-	display: inline;
+div#explosie{
+	background: url('tank.png') 410px 170px;
+	position: absolute;
+	height: 80px;
+	width: 80px;
 }
 
+
+/* div{
+	display: inline;
+} */
+
 body{
-	background-image: url("maptank.png");
-	background-repeat: no-repeat;
+	background-image: url("AMaze.png");
 	float: left;
 	background-position: 0px 0px;
 }

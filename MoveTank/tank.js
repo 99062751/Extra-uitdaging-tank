@@ -1,10 +1,13 @@
 var image = document.getElementById("image");
 var positieX= parseInt(window.getComputedStyle(image).backgroundPositionX);
 var positieY= parseInt(window.getComputedStyle(image).backgroundPositionY);
-var divbullet= document.getElementById("bullet");;
-
+var divbullet= document.getElementById("bullet");
 var windowwidth= window.innerWidth;
 var windowheigth= window.innerHeight;
+
+var id_number= 1;
+
+var ar= [];
 
 var number= 84;
 var divbulletX=  336;
@@ -13,20 +16,13 @@ var divbulletY=  170;
 var pos_x = 0;
 var pos_y = 0;
 
-var bullet_pos_x=  pos_x;
-var bullet_pos_y=  pos_y;
-
 var bulletSpeed= 80;
-// var numberRight= 84;
-// var numberRight2= 5;
-// var numberLeft= 84;
-// var numberLeft2= 5;
-// var numberBottom= 5;
-// var numberTop= 5;
-
 var stapafstand = bulletSpeed;
-
 var traveldistance= 10;
+
+
+var explosion= document.getElementById("explosie");
+
 
 window.addEventListener('resize', new_window_resize);
 
@@ -45,33 +41,6 @@ function checkKey(e) {
     if(e.keyCode == 32){
         console.log("spacebar");
         Createbullet();
-
-        bullet_pos_x=  pos_x;
-        bullet_pos_y=  pos_y;
-
-        divbullet.style.left = bullet_pos_x + "px";
-        divbullet.style.top= bullet_pos_y + "px";
-
-        setInterval(function(){
-            console.log(bullet_pos_x, bullet_pos_y);
-            if(divbullet.style.transform == "rotate(90deg)"){
-                divbullet.style.left = bullet_pos_x + "px";
-                bullet_pos_x = bullet_pos_x + bulletSpeed;
-            } 
-            else if(divbullet.style.transform == "rotate(-90deg)"){
-                divbullet.style.left= bullet_pos_x + "px";
-                bullet_pos_x= bullet_pos_x - bulletSpeed;
-
-            }else if(divbullet.style.transform == "rotate(0deg)"){
-                divbullet.style.top= bullet_pos_y + "px";
-                bullet_pos_y= bullet_pos_y - bulletSpeed; 
-
-            }else if(divbullet.style.transform == "rotate(180deg)"){
-                divbullet.style.top= bullet_pos_y + "px";
-                bullet_pos_y= bullet_pos_y + bulletSpeed; 
-            }
-        }, 500);                
-           
         
     } else if (e.keyCode == '38') {  // up arrow
         // console.log(pos_x + " " + pos_y);
@@ -123,10 +92,32 @@ function checkKey(e) {
 
 function Createbullet(){
     divbullet= document.createElement("div");
-    divbullet.setAttribute('id', "bullet");
+    divbullet.setAttribute('id', "bullet" + id_number);
     divbullet.style.transform = image.style.transform;
     document.body.appendChild(divbullet);
+    NameBullets();
+    move_bullet(ar[(id_number - 1)]);
+    id_number++;
 }
+
+function NameBullets() {
+    var divbullet2= {
+        element: document.getElementById("bullet" + id_number),
+        id: "bullet" + id_number,
+        bulletPositionX: pos_x,
+        bulletPositionY: pos_y,
+        transform: image.style.transform
+    };
+    ar.push(divbullet2);
+}
+
+
+function CreateExplosion(){
+    explosion= document.createElement("div");
+    explosion.setAttribute('class', "explosie");
+    document.body.appendChild(explosion);
+}
+
 function CheckOutOfScreen(){
     console.log(pos_x, pos_y);
     console.log(windowwidth, windowheigth);
@@ -140,4 +131,35 @@ function CheckOutOfScreen(){
         pos_y= 0;
     }
     console.log(pos_x, pos_y);
+}
+
+function move_bullet(bullet) {
+    divbullet = document.getElementById(bullet.id);
+    divbullet.style.left = bullet.bulletPositionX + "px";
+    divbullet.style.top= bullet.bulletPositionY + "px"; 
+
+    setInterval(function(){
+        if(divbullet.style.transform == "rotate(90deg)"){
+            divbullet.style.left = bullet.bulletPositionX + "px";
+            bullet.bulletPositionX = bullet.bulletPositionX + bulletSpeed;
+        } 
+        else if(divbullet.style.transform == "rotate(-90deg)"){
+            divbullet.style.left= bullet.bulletPositionX + "px";
+            bullet.bulletPositionX= bullet.bulletPositionX - bulletSpeed;
+
+        }else if(divbullet.style.transform == "rotate(0deg)"){
+            divbullet.style.top= bullet.bulletPositionY + "px";
+            bullet.bulletPositionY= bullet.bulletPositionY - bulletSpeed; 
+
+        }else if(divbullet.style.transform == "rotate(180deg)"){
+            divbullet.style.top= bullet.bulletPositionY + "px";
+            bullet.bulletPositionY =bullet.bulletPositionY + bulletSpeed; 
+        }
+        if(bullet.bulletPositionX >= 640){
+            divbullet.remove();
+            CreateExplosion();
+            explosion.style.left= bullet.bulletPositionX + "px";
+            explosion.style.top= bullet.bulletPositionY + "px";
+        }   
+    }, 500);  
 }
